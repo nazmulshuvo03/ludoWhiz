@@ -39,6 +39,9 @@ interface WalletProviderProps {
 const WalletProvider = ({ children }: WalletProviderProps) => {
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
+  const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(
+    null
+  );
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -61,6 +64,9 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       console.log("network: ", network);
       const accounts = await provider.send("eth_requestAccounts", []);
       console.log("accounts: ", accounts);
+      const signer = provider.getSigner();
+      console.log("signer: ", signer);
+      setSigner(signer);
       if (accounts.length > 0) {
         setIsWalletConnected(true);
         setWalletAddress(accounts[0]);
@@ -76,13 +82,15 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   }
 
-  async function getWalletInfo() {
+  async function getSigner() {
     if (provider) {
       const signer = provider.getSigner();
       console.log("signer: ", signer);
-      const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
-      console.log("contract: ", ethContract);
-      setContract(ethContract);
+      setSigner(signer);
+      const address = await signer.getAddress();
+      console.log("signer address: ", address);
+      const balance = await signer.getBalance();
+      console.log("signer balance: ", ethers.utils.formatEther(balance));
       await provider.send("eth_accounts", []);
       const accounts = await provider.send("eth_accounts", []);
       console.log("accounts: ", accounts);
@@ -93,9 +101,18 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     }
   }
 
+  async function getContract() {
+    if (signer) {
+      const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
+      console.log("contract: ", ethContract);
+      setContract(ethContract);
+    }
+  }
+
   useEffect(() => {
     if (provider) {
-      getWalletInfo();
+      getSigner();
+      getContract();
     }
   }, [provider]);
 
