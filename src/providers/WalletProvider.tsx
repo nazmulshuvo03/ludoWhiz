@@ -48,8 +48,8 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
       console.log("web3 provider: ", web3Provider);
 
-      const rpcProvider = new ethers.providers.JsonRpcProvider(window.ethereum);
-      console.log("json rpc provider: ", rpcProvider);
+      //   const rpcProvider = new ethers.providers.JsonRpcProvider(window.ethereum);
+      //   console.log("json rpc provider: ", rpcProvider);
 
       setProvider(web3Provider);
     }
@@ -59,12 +59,12 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     if (provider) {
       const network = await provider.getNetwork();
       console.log("network: ", network);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      console.log("signer: ", signer);
-      const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
-      console.log("contract: ", ethContract);
-      setContract(ethContract);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      console.log("accounts: ", accounts);
+      if (accounts.length > 0) {
+        setIsWalletConnected(true);
+        setWalletAddress(accounts[0]);
+      }
     }
   }
 
@@ -80,6 +80,9 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     if (provider) {
       const signer = provider.getSigner();
       console.log("signer: ", signer);
+      const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
+      console.log("contract: ", ethContract);
+      setContract(ethContract);
       await provider.send("eth_accounts", []);
       const accounts = await provider.send("eth_accounts", []);
       console.log("accounts: ", accounts);

@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar";
 
 function App() {
   const { count } = useContext(MainContext);
-  const { contract } = useContext(WalletContext);
+  const { contract, isWalletConnected } = useContext(WalletContext);
 
   console.log("count: ", count);
   console.log("contract: ", contract);
@@ -13,7 +13,11 @@ function App() {
   return (
     <div>
       <Navbar />
-      <h1>Hello from LudoWhiz</h1>
+      {isWalletConnected ? (
+        <h1>Hello from LudoWhiz</h1>
+      ) : (
+        <h1>Please connect your wallet</h1>
+      )}
     </div>
   );
 }
