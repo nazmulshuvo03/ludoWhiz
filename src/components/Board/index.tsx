@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
 import {
   BOX_BORDER,
   BOX_PER_ROW,
@@ -7,7 +7,8 @@ import {
 } from "../../constants/design";
 import Box from "../Box";
 import { getAmountFromIdx } from "../../functions/amount";
-import { colorPalette } from "../../constants/colors";
+import { MainContext } from "../../providers/MainProvider";
+import { RecursiveKeyValuePair } from "tailwindcss/types/config";
 
 interface BoardProps {
   scoreIdx?: number;
@@ -20,6 +21,10 @@ const Board = ({
   setScoreIdx = () => {},
   setAgentPosition = () => {},
 }: BoardProps) => {
+  const { theme } = useContext(MainContext);
+
+  console.log(theme);
+
   const boxRefs = useRef<(HTMLDivElement | null)[]>(
     Array(100)
       .fill(null)
@@ -42,9 +47,10 @@ const Board = ({
   };
 
   const getBoxColor = (index: number) => {
-    // let color =
-    //   index % 2 === 0 ? colorPalette.errorColor : colorPalette.successColor;
-    let color = colorPalette.backgroundAccent;
+    let colors = theme?.colors as RecursiveKeyValuePair<string, string>;
+    let color = colors?.background ?? "";
+    color = color.toString();
+    console.log("color: ", color, typeof color);
     const amount = getAmountFromIdx(index);
     if (amount) {
       if (amount.value > 0)
@@ -83,8 +89,9 @@ const Board = ({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        border: `${BOX_BORDER}px solid ${colorPalette.textColor}`,
+        border: `${BOX_BORDER}px solid`,
       }}
+      className="border-text"
     >
       {boxes}
     </div>

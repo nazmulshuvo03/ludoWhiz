@@ -1,4 +1,3 @@
-import { colorPalette } from "../../constants/colors";
 import { HISTORY_HEIGHT, HISTORY_WIDTH } from "../../constants/design";
 import { HistoryData } from "../../constants/types";
 
@@ -17,16 +16,15 @@ const History = ({ data }: HistoryProps) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        border: `1px solid ${colorPalette.accentColor}`,
       }}
+      className="border border-accent"
     >
       <div
         style={{
-          backgroundColor: colorPalette.accentColor,
-          color: colorPalette.textColor,
           padding: "1rem 0",
           textAlign: "center",
         }}
+        className="bg-accent text-text"
       >
         History
       </div>
@@ -40,31 +38,31 @@ const History = ({ data }: HistoryProps) => {
               justifyContent: "space-between",
               padding: "0 0.5rem",
               backgroundColor: index % 2 === 0 ? "#eee" : "#ccc",
-              color: colorPalette.backgroundColor,
             }}
+            className="text-background"
           >
-            <p
-              style={{ fontWeight: "300", color: colorPalette.backgroundColor }}
-            >
+            <p style={{ fontWeight: "300" }} className="text-background">
               {item.index}
             </p>
             <p
               style={{
                 fontWeight: "500",
-                color: item.amount.includes("-")
-                  ? colorPalette.errorColor
-                  : item.amount === "0%"
-                  ? colorPalette.backgroundColor
-                  : colorPalette.successColor,
               }}
+              className={`${
+                item.amount.includes("-")
+                  ? "text-error"
+                  : item.amount === "0%"
+                  ? "text-background"
+                  : "text-success"
+              }`}
             >
               {item.amount}
             </p>
             <p
               style={{
                 fontWeight: "300",
-                color: colorPalette.backgroundColor,
               }}
+              className="text-background"
             >
               {item.balance}
             </p>

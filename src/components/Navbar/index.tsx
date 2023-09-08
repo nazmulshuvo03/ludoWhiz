@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { WalletContext } from "../../providers/WalletProvider";
-import { colorPalette } from "../../constants/colors";
 import { getShortenedAddress } from "../../functions/string";
 
 export default function Navbar() {
@@ -13,8 +12,8 @@ export default function Navbar() {
         display: "flex",
         justifyContent: "space-between",
         padding: "0.5rem 1rem",
-        backgroundColor: colorPalette.primaryColor,
       }}
+      className="bg-primary text-text"
     >
       <div
         style={{
@@ -28,16 +27,13 @@ export default function Navbar() {
         style={{
           cursor: "pointer",
           padding: "10px",
-          backgroundColor: walletAddress
-            ? colorPalette.secondaryColor
-            : colorPalette.buttonColor,
           borderRadius: "25rem",
           border: "none",
           outline: "none",
-          color: colorPalette.textColor,
           fontSize: "1rem",
           fontWeight: "500",
         }}
+        className={`${walletAddress ? "bg-secondary" : "bg-button"} text-text`}
         onClick={walletAddress ? disconnectWallet : getWalletAccess}
       >
         {walletAddress ? getShortenedAddress(walletAddress) : "Connect Wallet"}
