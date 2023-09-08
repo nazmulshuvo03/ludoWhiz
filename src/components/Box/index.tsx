@@ -1,4 +1,5 @@
-import { BORDER_COLOR, BOX_BORDER, BOX_SIZE } from "../../constants/design";
+import { colorPalette } from "../../constants/colors";
+import { BOX_BORDER, BOX_SIZE } from "../../constants/design";
 
 interface BoxProps {
   id?: number;
@@ -9,7 +10,7 @@ interface BoxProps {
 
 const Box = ({
   id = 1,
-  color = "#fff",
+  color = colorPalette.backgroundAccent,
   reference = null,
   handleClick = () => {},
 }: BoxProps) => {
@@ -21,10 +22,11 @@ const Box = ({
         height: BOX_SIZE,
         width: BOX_SIZE,
         backgroundColor: color,
+        color: colorPalette.textColor,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        border: `${BOX_BORDER}px solid ${BORDER_COLOR}`,
+        border: `${BOX_BORDER}px solid ${colorPalette.textColor}`,
       }}
       onClick={handleClick}
     >

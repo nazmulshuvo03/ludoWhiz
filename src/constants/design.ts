@@ -1,11 +1,7 @@
 export const BOX_SIZE = 60;
-export const EVEN_BOX_COLOR = "#e1e1e15e";
-export const ODD_BOX_COLOR = "#e1e1e1";
 export const BOX_PER_ROW = 10;
 export const BOX_BORDER = 1;
-export const BORDER_COLOR = "rgb(177 173 173)";
 export const AGENT_SIZE = BOX_SIZE / 2;
-export const AGENT_COLOR = "rgb(255 12 120 / 50%)";
 export const AGENT_DEFAULT_POSITION = [900, 800];
 export const DICE_SIZE = 70;
 export const HISTORY_HEIGHT = 620;

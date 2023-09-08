@@ -1,3 +1,4 @@
+import { colorPalette } from "../../constants/colors";
 import { HISTORY_HEIGHT, HISTORY_WIDTH } from "../../constants/design";
 import { HistoryData } from "../../constants/types";
 
@@ -16,13 +17,13 @@ const History = ({ data }: HistoryProps) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        border: "1px solid #333",
+        border: `1px solid ${colorPalette.accentColor}`,
       }}
     >
       <div
         style={{
-          backgroundColor: "#333",
-          color: "#fff",
+          backgroundColor: colorPalette.accentColor,
+          color: colorPalette.textColor,
           padding: "1rem 0",
           textAlign: "center",
         }}
@@ -39,21 +40,34 @@ const History = ({ data }: HistoryProps) => {
               justifyContent: "space-between",
               padding: "0 0.5rem",
               backgroundColor: index % 2 === 0 ? "#eee" : "#ccc",
+              color: colorPalette.backgroundColor,
             }}
           >
-            <p>{item.index}</p>
+            <p
+              style={{ fontWeight: "300", color: colorPalette.backgroundColor }}
+            >
+              {item.index}
+            </p>
             <p
               style={{
+                fontWeight: "500",
                 color: item.amount.includes("-")
-                  ? "red"
+                  ? colorPalette.errorColor
                   : item.amount === "0%"
-                  ? "#333"
-                  : "green",
+                  ? colorPalette.backgroundColor
+                  : colorPalette.successColor,
               }}
             >
               {item.amount}
             </p>
-            <p style={{ fontWeight: "bold", color: "#333" }}>{item.balance}</p>
+            <p
+              style={{
+                fontWeight: "300",
+                color: colorPalette.backgroundColor,
+              }}
+            >
+              {item.balance}
+            </p>
           </div>
         ))}
     </div>

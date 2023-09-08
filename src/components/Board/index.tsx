@@ -3,13 +3,11 @@ import {
   BOX_BORDER,
   BOX_PER_ROW,
   BOX_SIZE,
-  EVEN_BOX_COLOR,
-  ODD_BOX_COLOR,
-  BORDER_COLOR,
   AGENT_DEFAULT_POSITION,
 } from "../../constants/design";
 import Box from "../Box";
 import { getAmountFromIdx } from "../../functions/amount";
+import { colorPalette } from "../../constants/colors";
 
 interface BoardProps {
   scoreIdx?: number;
@@ -44,7 +42,9 @@ const Board = ({
   };
 
   const getBoxColor = (index: number) => {
-    let color = index % 2 === 0 ? EVEN_BOX_COLOR : ODD_BOX_COLOR;
+    // let color =
+    //   index % 2 === 0 ? colorPalette.errorColor : colorPalette.successColor;
+    let color = colorPalette.backgroundAccent;
     const amount = getAmountFromIdx(index);
     if (amount) {
       if (amount.value > 0)
@@ -83,7 +83,7 @@ const Board = ({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        border: `${BOX_BORDER}px solid ${BORDER_COLOR}`,
+        border: `${BOX_BORDER}px solid ${colorPalette.textColor}`,
       }}
     >
       {boxes}
