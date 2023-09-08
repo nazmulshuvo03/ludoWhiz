@@ -4,3 +4,9 @@ export enum AppStates {
   GAME = "GAME",
   GAME_OVER = "GAME_OVER",
 }
+
+export type HistoryData = {
+  index: number;
+  balance: number;
+  amount: string;
+};
