@@ -40,7 +40,7 @@ const GameScreen: React.FC<GameScreenProps> = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-10">
-      <div className="w-full flex justify-center gap-3">
+      <div className="w-full flex justify-center gap-10">
         <Board {...{ scoreIdx, setScoreIdx, setAgentPosition }} />
         <Agent {...{ scoreIdx, agentPosition }} />
         <History {...{ data: history }} />

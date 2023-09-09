@@ -15,7 +15,7 @@ const Agent = ({ scoreIdx = 0, agentPosition = [0, 0] }) => {
       className="fixed bg-secondary text-text h-agent w-agent rounded-full 
       shadow-2xl flex justify-center items-center font-medium text-base"
     >
-      {scoreIdx}
+      {scoreIdx > 0 && scoreIdx}
     </div>
   );
 };
