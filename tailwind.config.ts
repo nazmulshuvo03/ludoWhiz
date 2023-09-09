@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 import type { Config } from "tailwindcss";
 
+export const BASE_FONT_SIZE = 16;
+
 export const BOX_SIZE = 4;
 export const BOX_PER_ROW = 10;
 export const BOX_BORDER = 0.15;
@@ -10,6 +12,9 @@ const config: Config = {
   content: ["./index.html", "./src/**/*.{html,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontSize: {
+        base: `${BASE_FONT_SIZE}px`,
+      },
       colors: {
         primary: "#00B894", // Cryptocurrency Green
         secondary: "#F2C94C", // Digital Gold

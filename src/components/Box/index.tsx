@@ -18,8 +18,8 @@ const Box = ({
       style={{
         backgroundColor: color,
       }}
-      className="text-text border-backgroundAccent 
-      border-box border-solid h-box w-box flex justify-center items-center rounded"
+      className="text-text border-backgroundAccent border-box border-solid 
+      h-box w-box flex justify-center items-center rounded font-medium text-base"
       onClick={handleClick}
     >
       {id}

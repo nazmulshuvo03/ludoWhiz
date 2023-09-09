@@ -42,7 +42,7 @@ const GameScreen: React.FC<GameScreenProps> = () => {
     <div className="flex flex-col justify-center items-center gap-10">
       <div className="w-full flex justify-center gap-3">
         <Board {...{ scoreIdx, setScoreIdx, setAgentPosition }} />
-        <Agent {...{ agentPosition }} />
+        <Agent {...{ scoreIdx, agentPosition }} />
         <History {...{ data: history }} />
       </div>
       <Dice {...{ setScoreIdx }} />

@@ -23,7 +23,7 @@ function App() {
     }
   }, [isWalletConnected]);
 
-  console.log("state: ", appState);
+  console.log("app state: ", appState);
 
   return (
     <div className="h-full w-full flex flex-col">

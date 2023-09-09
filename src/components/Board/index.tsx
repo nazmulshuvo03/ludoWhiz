@@ -19,8 +19,6 @@ const Board = ({
 }: BoardProps) => {
   const { theme } = useContext(MainContext);
 
-  console.log(theme);
-
   const boxRefs = useRef<(HTMLDivElement | null)[]>(
     Array(100)
       .fill(null)
@@ -31,7 +29,6 @@ const Board = ({
     const boxNode = boxRefs.current[index - 1];
     if (boxNode !== null) {
       const boxPosition = boxNode.getBoundingClientRect();
-      console.log(index, boxPosition);
       return [boxPosition.x, boxPosition.y];
     } else {
       return [0, 0];
@@ -46,7 +43,6 @@ const Board = ({
     let colors = theme?.colors as RecursiveKeyValuePair<string, string>;
     let color = colors?.background ?? "";
     color = color.toString();
-    console.log("color: ", color, typeof color);
     const amount = getAmountFromIdx(index);
     if (amount) {
       if (amount.value > 0)

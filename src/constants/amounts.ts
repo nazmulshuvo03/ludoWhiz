@@ -1,7 +1,4 @@
-interface Amount {
-  id: number;
-  value: number;
-}
+import { Amount } from "./types";
 
 export const AMOUNTS: Amount[] = [
   { id: 3, value: 2 },

@@ -10,3 +10,8 @@ export type HistoryData = {
   balance: number;
   amount: string;
 };
+
+export type Amount = {
+  id: number;
+  value: number;
+};
