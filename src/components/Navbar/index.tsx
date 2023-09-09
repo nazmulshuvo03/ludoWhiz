@@ -11,7 +11,8 @@ export default function Navbar() {
 
   async function fetchWhizBalance() {
     let balance = await contract?.whizBalance();
-    balance = ethers.utils.formatEther(balance);
+    // balance = ethers.utils.formatEther(balance);
+    balance = ethers.utils.formatUnits(balance, "wei");
     setWhizBalance(balance);
   }
 
@@ -24,7 +25,7 @@ export default function Navbar() {
       <div className="text-text text-4xl font-bold font-mono">
         <span>LudoWhiz</span>
         <span className="text-base px-2 text-highlight">
-          {whizBalance + "eth"}
+          {whizBalance + "wei"}
         </span>
       </div>
       <Button

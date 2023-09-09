@@ -13,6 +13,7 @@ declare global {
 
 interface WalletContextProps {
   provider: ethers.providers.JsonRpcProvider | null;
+  signer: ethers.providers.JsonRpcSigner | null;
   contract: ethers.Contract | null;
   isWalletConnected: boolean;
   walletAddress: string;
@@ -22,6 +23,7 @@ interface WalletContextProps {
 
 const initialWalletContextValues: WalletContextProps = {
   provider: null,
+  signer: null,
   contract: null,
   isWalletConnected: false,
   walletAddress: "",
@@ -65,15 +67,19 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     if (provider) {
       const network = await provider.getNetwork();
       console.log("network: ", network);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      console.log("accounts: ", accounts);
       const signer = provider.getSigner();
       console.log("signer: ", signer);
       setSigner(signer);
-      if (accounts.length > 0) {
-        setIsWalletConnected(true);
-        setWalletAddress(accounts[0]);
-      }
+      const address = await signer.getAddress();
+      console.log("signer address: ", address);
+      setWalletAddress(address);
+      setIsWalletConnected(true);
+      // const accounts = await provider.send("eth_requestAccounts", []);
+      // console.log("accounts: ", accounts);
+      // if (accounts.length > 0) {
+      //   setIsWalletConnected(true);
+      //   setWalletAddress(accounts[0]);
+      // }
     }
   }
 
@@ -94,14 +100,16 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       const address = await signer.getAddress();
       console.log("signer address: ", address);
       const balance = await signer.getBalance();
-      console.log("signer balance: ", ethers.utils.formatEther(balance));
-      await provider.send("eth_accounts", []);
-      const accounts = await provider.send("eth_accounts", []);
-      console.log("accounts: ", accounts);
-      if (accounts.length > 0) {
-        setIsWalletConnected(true);
-        setWalletAddress(accounts[0]);
-      }
+      console.log("signer balance: ", ethers.utils.formatEther(balance), "eth");
+      setWalletAddress(address);
+      setIsWalletConnected(true);
+      // await provider.send("eth_accounts", []);
+      // const accounts = await provider.send("eth_accounts", []);
+      // console.log("accounts: ", accounts);
+      // if (accounts.length > 0) {
+      //   setIsWalletConnected(true);
+      //   setWalletAddress(accounts[0]);
+      // }
     }
   }
 
@@ -123,6 +131,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
 
   const value = {
     provider,
+    signer,
     contract,
     isWalletConnected,
     walletAddress,
