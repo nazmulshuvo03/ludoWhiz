@@ -1,17 +1,13 @@
-import { AGENT_SIZE, BOX_SIZE } from "../../constants/design";
+import { AGENT_SIZE, BOX_SIZE } from "../../../tailwind.config";
 
 const Agent = ({ agentPosition = [0, 0] }) => {
   return (
     <div
       style={{
-        height: AGENT_SIZE,
-        width: AGENT_SIZE,
-        borderRadius: "50%",
-        position: "fixed",
         left: agentPosition[0] + BOX_SIZE / 2 - AGENT_SIZE / 2,
         top: agentPosition[1] + BOX_SIZE / 2 - AGENT_SIZE / 2,
       }}
-      className="bg-secondary"
+      className="fixed bg-secondary h-agent w-agent rounded-full shadow-2xl"
     />
   );
 };

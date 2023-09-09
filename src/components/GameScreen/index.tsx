@@ -39,44 +39,8 @@ const GameScreen: React.FC<GameScreenProps> = () => {
   }, [balance]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 10,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ fontSize: 36, fontWeight: "bold", color: "#333" }}>
-          SoLudo
-        </p>
-        <p
-          style={{
-            fontSize: 36,
-            fontWeight: "bold",
-            color: "#333",
-            padding: "0 0.5rem",
-          }}
-        >
-          -
-        </p>
-        <p style={{ fontSize: 36, fontWeight: "bold", color: "#333" }}>
-          {balance}
-        </p>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+    <div className="flex flex-col justify-center items-center gap-10">
+      <div className="w-full flex justify-center gap-3">
         <Board {...{ scoreIdx, setScoreIdx, setAgentPosition }} />
         <Agent {...{ agentPosition }} />
         <History {...{ data: history }} />

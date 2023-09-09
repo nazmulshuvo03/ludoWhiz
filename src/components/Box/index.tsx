@@ -1,5 +1,3 @@
-import { BOX_BORDER, BOX_SIZE } from "../../constants/design";
-
 interface BoxProps {
   id?: number;
   color?: string;
@@ -18,15 +16,10 @@ const Box = ({
       id={id.toString()}
       ref={reference}
       style={{
-        height: BOX_SIZE,
-        width: BOX_SIZE,
         backgroundColor: color,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        border: `${BOX_BORDER}px solid`,
       }}
-      className="text-text border-text"
+      className="text-text border-backgroundAccent 
+      border-box border-solid h-box w-box flex justify-center items-center rounded"
       onClick={handleClick}
     >
       {id}

@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     if (isWalletConnected) {
       if (appState === AppStates.NOT_CONNECTED) {
-        setAppState(AppStates.INIT);
+        setAppState(AppStates.GAME);
       } else {
         setAppState(appState);
       }
@@ -26,22 +26,9 @@ function App() {
   console.log("state: ", appState);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100%",
-        flexDirection: "column",
-      }}
-    >
+    <div className="h-full w-full flex flex-col">
       <Navbar />
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className="flex-1 flex justify-center items-center">
         {appState === AppStates.INIT ? (
           <InitScreen />
         ) : appState === AppStates.GAME ? (

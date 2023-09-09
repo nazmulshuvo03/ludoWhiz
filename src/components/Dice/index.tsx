@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { DICE_SIZE } from "../../constants/design";
 
 interface DiceProps {
   setScoreIdx?: (scoreIdx: number | ((prev: number) => number)) => void;
@@ -28,25 +27,9 @@ const Dice = ({ setScoreIdx = () => {} }: DiceProps) => {
     <div>
       <button
         onClick={rollDice}
-        style={{
-          width: DICE_SIZE,
-          height: DICE_SIZE,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 6,
-          padding: 6,
-          boxShadow: "rgb(179 178 178) 0px 0px 4px 0px",
-          border: "2px solid rgb(179 178 178)",
-        }}
+        className={`bg-primary h-dice w-dice flex justify-center items-center rounded-md shadow-2xl`}
       >
-        <div
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            color: "#333",
-          }}
-        >
+        <div className="text-center text-text font-bold text-4xl">
           {loading ? "???" : dice === 0 ? "Roll Dice" : dice}
         </div>
       </button>

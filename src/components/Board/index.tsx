@@ -1,14 +1,10 @@
 import { useRef, useEffect, useContext } from "react";
-import {
-  BOX_BORDER,
-  BOX_PER_ROW,
-  BOX_SIZE,
-  AGENT_DEFAULT_POSITION,
-} from "../../constants/design";
 import Box from "../Box";
 import { getAmountFromIdx } from "../../functions/amount";
 import { MainContext } from "../../providers/MainProvider";
 import { RecursiveKeyValuePair } from "tailwindcss/types/config";
+
+export const AGENT_DEFAULT_POSITION = [900, 800];
 
 interface BoardProps {
   scoreIdx?: number;
@@ -83,15 +79,7 @@ const Board = ({
 
   return (
     <div
-      style={{
-        width: BOX_SIZE * BOX_PER_ROW + BOX_PER_ROW * BOX_BORDER * 2,
-        height: BOX_SIZE * BOX_PER_ROW + BOX_PER_ROW * BOX_BORDER * 2,
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        border: `${BOX_BORDER}px solid`,
-      }}
-      className="border-text"
+      className={`bg-backgroundAccent border-backgroundAccent border-box border-solid flex flex-wrap h-board w-board rounded`}
     >
       {boxes}
     </div>
