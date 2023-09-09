@@ -13,6 +13,7 @@ const InitScreen: React.FC<Props> = ({}) => {
   const { updateState } = useContext(MainContext);
   const { contract, signer } = useContext(WalletContext);
   const [userBalance, setUserBalance] = useState<string>("0");
+  const [gameStartAmount, setGameStartAmount] = useState<string>("0");
   const [fundAmount, setFundAmount] = useState<string>("100");
 
   async function fundWhiz() {
@@ -27,6 +28,11 @@ const InitScreen: React.FC<Props> = ({}) => {
     let balance = (await signer?.getBalance()) as BigNumber;
     const formattedBalance = ethers.utils.formatUnits(balance, "wei");
     setUserBalance(formattedBalance);
+  }
+
+  async function gameInitialize() {
+    // const tx = await contract?.initializeGame(gameStartAmount, "wei");
+    updateState(AppStates.GAME);
   }
 
   useEffect(() => {
@@ -49,8 +55,10 @@ const InitScreen: React.FC<Props> = ({}) => {
           placeholder="eg: 1000"
           label={"Enter your amount (in wei: 1 eth = 10e18 wei)"}
           className="w-96"
+          value={gameStartAmount}
+          onChange={(e) => setGameStartAmount(e.target.value)}
         />
-        <Button onClick={() => updateState(AppStates.GAME)}>Continue</Button>
+        <Button onClick={gameInitialize}>Continue</Button>
       </div>
       <div className="flex mt-auto gap-2 py-5 justify-center items-center">
         <Input

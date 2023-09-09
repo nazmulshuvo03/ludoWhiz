@@ -66,7 +66,35 @@
   {
     "inputs": [],
     "name": "initializeGame",
-    "outputs": [],
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "gameId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "player",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gameAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "playerAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct LudoWhiz.Game",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },

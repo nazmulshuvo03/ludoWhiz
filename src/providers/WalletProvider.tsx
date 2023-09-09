@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 
-const CONTRACT_ADDDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const CONTRACT_ADDDRESS = "0x8464135c8F25Da09e49BC8782676a84730C318bC";
 
 declare global {
   interface Window {
@@ -78,17 +78,17 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       // console.log("accounts: ", accounts);
       // if (accounts.length > 0) {
       //   setIsWalletConnected(true);
-      //   setWalletAddress(accounts[0]);
+      //   setWalletAddress(accounts[1]);
       // }
     }
   }
 
   async function disconnectWallet() {
     if (provider) {
+      clearLocalState();
       await provider.send("eth_requestAccounts", [{ eth_accounts: {} }]);
       setIsWalletConnected(false);
       setWalletAddress("");
-      clearLocalState();
     }
   }
 
@@ -108,7 +108,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       // console.log("accounts: ", accounts);
       // if (accounts.length > 0) {
       //   setIsWalletConnected(true);
-      //   setWalletAddress(accounts[0]);
+      //   setWalletAddress(accounts[1]);
       // }
     }
   }
@@ -118,8 +118,38 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
       console.log("contract: ", ethContract);
       setContract(ethContract);
+      // const contractSigner = ethContract.signer;
+      // const contractSignerAddress = await contractSigner.getAddress();
+      // console.log("contract signer address: ", contractSignerAddress);
+      // const contractSignerBalance = await contractSigner.getBalance();
+      // console.log(
+      //   "contract signer balance: ",
+      //   ethers.utils.formatEther(contractSignerBalance),
+      //   "eth"
+      // );
     }
   }
+
+  // async function getContractDeployer() {
+  //   if (provider) {
+  //     provider
+  //       .getTransactionReceipt(
+  //         "0x38f80ee1ac0cea32ab62bd41ac51ebbc0beeef60c8f31d3639c9128e3784597a"
+  //       )
+  //       .then((receipt) => {
+  //         if (receipt) {
+  //           // The "from" field of the receipt contains the deployer's address
+  //           const deployerAddress = receipt.from;
+  //           console.log(`Deployer Address: ${deployerAddress}`);
+  //         } else {
+  //           console.log("Contract deployment receipt not found.");
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error:", error);
+  //       });
+  //   }
+  // }
 
   useEffect(() => {
     if (provider) getSigner();
