@@ -7,7 +7,7 @@ import Button from "../Form/Button";
 interface Props {}
 
 const InitScreen: React.FC<Props> = ({}) => {
-  const { setAppState } = useContext(MainContext);
+  const { updateState } = useContext(MainContext);
 
   return (
     <div className="flex flex-col justify-center items-center gap-3 bg-slate-600 rounded-2xl shadow-lg p-10">
@@ -17,7 +17,7 @@ const InitScreen: React.FC<Props> = ({}) => {
         label={"Enter your amount (in wei)"}
         className="w-96"
       />
-      <Button onClick={() => setAppState(AppStates.GAME)}>Continue</Button>
+      <Button onClick={() => updateState(AppStates.GAME)}>Continue</Button>
     </div>
   );
 };

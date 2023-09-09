@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import ABI from "./abi.json";
+import { clearLocalState } from "../functions/state";
 
 const CONTRACT_ADDDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
 
@@ -79,6 +80,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       await provider.send("eth_requestAccounts", [{ eth_accounts: {} }]);
       setIsWalletConnected(false);
       setWalletAddress("");
+      clearLocalState();
     }
   }
 

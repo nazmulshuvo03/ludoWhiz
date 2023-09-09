@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     if (isWalletConnected) {
       if (appState === AppStates.NOT_CONNECTED) {
-        setAppState(AppStates.GAME);
+        setAppState(AppStates.INIT);
       } else {
         setAppState(appState);
       }
