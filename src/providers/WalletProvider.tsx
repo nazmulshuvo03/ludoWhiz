@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 
-const CONTRACT_ADDDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+const CONTRACT_ADDDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ declare global {
 }
 
 interface WalletContextProps {
-  provider: ethers.providers.Web3Provider | null;
+  provider: ethers.providers.JsonRpcProvider | null;
   contract: ethers.Contract | null;
   isWalletConnected: boolean;
   walletAddress: string;
@@ -39,7 +39,7 @@ interface WalletProviderProps {
 
 const WalletProvider = ({ children }: WalletProviderProps) => {
   const [provider, setProvider] =
-    useState<ethers.providers.Web3Provider | null>(null);
+    useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(
     null
   );
@@ -49,13 +49,15 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
 
   useEffect(() => {
     if (window.ethereum) {
-      const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-      console.log("web3 provider: ", web3Provider);
+      // const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+      // console.log("web3 provider: ", web3Provider);
 
-      //   const rpcProvider = new ethers.providers.JsonRpcProvider(window.ethereum);
-      //   console.log("json rpc provider: ", rpcProvider);
+      const rpcProvider = new ethers.providers.JsonRpcProvider(
+        "http://127.0.0.1:8545"
+      );
+      console.log("json rpc provider: ", rpcProvider);
 
-      setProvider(web3Provider);
+      setProvider(rpcProvider);
     }
   }, []);
 
@@ -112,11 +114,12 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
   }
 
   useEffect(() => {
-    if (provider) {
-      getSigner();
-      getContract();
-    }
+    if (provider) getSigner();
   }, [provider]);
+
+  useEffect(() => {
+    if (signer) getContract();
+  }, [signer]);
 
   const value = {
     provider,
