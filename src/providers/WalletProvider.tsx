@@ -1,9 +1,16 @@
-import { ReactNode, createContext, useState, useEffect } from "react";
+import {
+  ReactNode,
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 import { CURRENCY } from "../constants/types";
 import { refreshAmountData } from "../functions/amount";
+import { MainContext } from "./MainProvider";
 
 const CONTRACT_ADDDRESS = "0xb19b36b1456E65E3A6D514D3F715f204BD59f431";
 
@@ -46,6 +53,8 @@ interface WalletProviderProps {
 }
 
 const WalletProvider = ({ children }: WalletProviderProps) => {
+  const { updateGameData } = useContext(MainContext);
+
   const [provider, setProvider] =
     useState<ethers.providers.JsonRpcProvider | null>(null);
   const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(
@@ -179,6 +188,23 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
 
   useEffect(() => {
     if (contract) fetchWhizBalance();
+  }, [contract]);
+
+  useEffect(() => {
+    if (contract) {
+      contract.on(
+        "GameInitialized",
+        (gameId, player, gameAmount, playerAmount, event) => {
+          console.log("GameInitialized event received:", event);
+          updateGameData({
+            gameId,
+            player,
+            gameAmount: ethers.utils.formatUnits(gameAmount, CURRENCY),
+            playerAmount: ethers.utils.formatUnits(playerAmount, CURRENCY),
+          });
+        }
+      );
+    }
   }, [contract]);
 
   const value = {

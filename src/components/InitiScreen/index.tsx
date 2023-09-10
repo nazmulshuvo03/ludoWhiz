@@ -15,19 +15,20 @@ const InitScreen: React.FC<Props> = ({}) => {
   const [gameStartAmount, setGameStartAmount] = useState<string>("0");
   const [fundAmount, setFundAmount] = useState<string>("100");
 
+  async function getUserBalance() {
+    let balance = (await signer?.getBalance()) as BigNumber;
+    const formattedBalance = ethers.utils.formatUnits(balance, CURRENCY);
+    setUserBalance(formattedBalance);
+  }
+
   async function fundWhiz() {
     const amount = ethers.utils.parseUnits(fundAmount, CURRENCY);
     const tx = await contract?.fundWhiz({ value: amount });
     await tx?.wait();
     console.log("funded whiz", tx);
     fetchWhizBalance();
+    getUserBalance();
     alert("Whiz thanks you for your contribution!");
-  }
-
-  async function getUserBalance() {
-    let balance = (await signer?.getBalance()) as BigNumber;
-    const formattedBalance = ethers.utils.formatUnits(balance, CURRENCY);
-    setUserBalance(formattedBalance);
   }
 
   async function gameInitialize() {
@@ -53,9 +54,7 @@ const InitScreen: React.FC<Props> = ({}) => {
           CURRENCY
         ),
       });
-      contract.on("GameInitialized", (result) => {
-        console.log("GameInitialized received:", result);
-      });
+
       updateState(AppStates.GAME);
     }
   }
