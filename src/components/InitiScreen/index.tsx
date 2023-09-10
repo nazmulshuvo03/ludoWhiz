@@ -1,52 +1,57 @@
 import React, { useContext, useState, useEffect } from "react";
+import { ethers, BigNumber } from "ethers";
 import { MainContext } from "../../providers/MainProvider";
-import { AppStates } from "../../constants/types";
+import { AppStates, CURRENCY } from "../../constants/types";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import { WalletContext } from "../../providers/WalletProvider";
-import { ethers } from "ethers";
-import { BigNumber } from "ethers";
 
 interface Props {}
 
 const InitScreen: React.FC<Props> = ({}) => {
   const { updateState, updateGameData } = useContext(MainContext);
-  const { contract, signer } = useContext(WalletContext);
+  const { contract, signer, fetchWhizBalance } = useContext(WalletContext);
   const [userBalance, setUserBalance] = useState<string>("0");
   const [gameStartAmount, setGameStartAmount] = useState<string>("0");
   const [fundAmount, setFundAmount] = useState<string>("100");
 
   async function fundWhiz() {
-    const amount = ethers.utils.parseUnits(fundAmount, "wei");
+    const amount = ethers.utils.parseUnits(fundAmount, CURRENCY);
     const tx = await contract?.fundWhiz({ value: amount });
     await tx?.wait();
     console.log("funded whiz", tx);
+    fetchWhizBalance();
     alert("Whiz thanks you for your contribution!");
   }
 
   async function getUserBalance() {
     let balance = (await signer?.getBalance()) as BigNumber;
-    const formattedBalance = ethers.utils.formatUnits(balance, "wei");
+    const formattedBalance = ethers.utils.formatUnits(balance, CURRENCY);
     setUserBalance(formattedBalance);
   }
 
   async function gameInitialize() {
     if (contract) {
-      const amount = ethers.utils.parseUnits(gameStartAmount, "wei");
+      const amount = ethers.utils.parseUnits(gameStartAmount, CURRENCY);
       const tx = await contract?.initializeGame({ value: amount });
       const receipt = await tx.wait();
-      console.log("tx: ", receipt);
+      console.log("Initialize game transaction: ", receipt);
       const filter = contract.filters.GameInitialized();
       console.log("filter: ", filter);
       const logs = await contract.queryFilter(filter, receipt.blockHash);
       console.log("logs: ", logs);
       const event = contract.interface.parseLog(logs[0]);
       console.log("Event Data:", event.args);
+      fetchWhizBalance();
+      getUserBalance();
       updateGameData({
         gameId: event.args.gameId,
         player: event.args.player,
-        gameAmount: ethers.utils.formatUnits(event.args.gameAmount, "wei"),
-        playerAmount: ethers.utils.formatUnits(event.args.playerAmount, "wei"),
+        gameAmount: ethers.utils.formatUnits(event.args.gameAmount, CURRENCY),
+        playerAmount: ethers.utils.formatUnits(
+          event.args.playerAmount,
+          CURRENCY
+        ),
       });
       contract.on("GameInitialized", (result) => {
         console.log("GameInitialized received:", result);
@@ -59,13 +64,15 @@ const InitScreen: React.FC<Props> = ({}) => {
     if (signer) getUserBalance();
   }, [signer]);
 
+  console.log("signer balance init screen: ", userBalance);
+
   return (
     <div>
       <div>
         <div className="text-2xl px-1 py-3">
           <span>You have </span>
           <span className="text-highlight font-bold text-xl">
-            {userBalance} wei
+            {userBalance} {CURRENCY}
           </span>
         </div>
       </div>

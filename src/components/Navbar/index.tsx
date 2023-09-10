@@ -1,31 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { WalletContext } from "../../providers/WalletProvider";
 import { getShortenedAddress } from "../../functions/string";
 import Button from "../Form/Button";
-import { ethers } from "ethers";
+import { CURRENCY } from "../../constants/types";
 
 export default function Navbar() {
-  const { getWalletAccess, walletAddress, disconnectWallet, contract } =
+  const { getWalletAccess, walletAddress, disconnectWallet, whizBalance } =
     useContext(WalletContext);
-  const [whizBalance, setWhizBalance] = useState<string>("0");
 
-  async function fetchWhizBalance() {
-    let balance = await contract?.whizBalance();
-    // balance = ethers.utils.formatEther(balance);
-    balance = ethers.utils.formatUnits(balance, "wei");
-    setWhizBalance(balance);
-  }
-
-  useEffect(() => {
-    if (contract) fetchWhizBalance();
-  }, [contract]);
+  console.log("whiz balance navbar: ", whizBalance);
 
   return (
     <div className="bg-primary text-text flex justify-between items-center px-5 py-3">
       <div className="text-text text-4xl font-bold font-mono">
         <span>LudoWhiz</span>
         <span className="text-base px-2 text-highlight">
-          {whizBalance + "wei"}
+          {whizBalance + CURRENCY}
         </span>
       </div>
       <Button

@@ -30,3 +30,5 @@ export type GameResult = {
   playerAmount: string;
   resultAmount: string;
 };
+
+export const CURRENCY = "ether";

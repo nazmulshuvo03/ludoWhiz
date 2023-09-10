@@ -2,8 +2,9 @@ import { ReactNode, createContext, useState, useEffect } from "react";
 import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
+import { CURRENCY } from "../constants/types";
 
-const CONTRACT_ADDDRESS = "0xA15BB66138824a1c7167f5E85b957d04Dd34E468";
+const CONTRACT_ADDDRESS = "0xb19b36b1456E65E3A6D514D3F715f204BD59f431";
 
 declare global {
   interface Window {
@@ -15,6 +16,8 @@ interface WalletContextProps {
   provider: ethers.providers.JsonRpcProvider | null;
   signer: ethers.providers.JsonRpcSigner | null;
   contract: ethers.Contract | null;
+  whizBalance: string;
+  fetchWhizBalance: () => void;
   isWalletConnected: boolean;
   walletAddress: string;
   getWalletAccess: () => void;
@@ -25,6 +28,8 @@ const initialWalletContextValues: WalletContextProps = {
   provider: null,
   signer: null,
   contract: null,
+  whizBalance: "0",
+  fetchWhizBalance: () => {},
   isWalletConnected: false,
   walletAddress: "",
   getWalletAccess: () => {},
@@ -46,6 +51,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     null
   );
   const [contract, setContract] = useState<ethers.Contract | null>(null);
+  const [whizBalance, setWhizBalance] = useState<string>("0");
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
   const [walletAddress, setWalletAddress] = useState<string>("");
 
@@ -100,7 +106,10 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       const address = await signer.getAddress();
       console.log("signer address: ", address);
       const balance = await signer.getBalance();
-      console.log("signer balance: ", ethers.utils.formatEther(balance), "eth");
+      console.log(
+        "signer balance: ",
+        ethers.utils.formatUnits(balance, CURRENCY)
+      );
       setWalletAddress(address);
       setIsWalletConnected(true);
       // await provider.send("eth_accounts", []);
@@ -128,6 +137,13 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
       //   "eth"
       // );
     }
+  }
+
+  async function fetchWhizBalance() {
+    let balance = await contract?.whizBalance();
+    // balance = ethers.utils.formatEther(balance);
+    balance = ethers.utils.formatUnits(balance, CURRENCY);
+    setWhizBalance(balance);
   }
 
   // async function getContractDeployer() {
@@ -159,10 +175,16 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
     if (signer) getContract();
   }, [signer]);
 
+  useEffect(() => {
+    if (contract) fetchWhizBalance();
+  }, [contract]);
+
   const value = {
     provider,
     signer,
     contract,
+    whizBalance,
+    fetchWhizBalance,
     isWalletConnected,
     walletAddress,
     getWalletAccess,

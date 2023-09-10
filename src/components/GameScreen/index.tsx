@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
+import { ethers } from "ethers";
 import { getAmountFromIdx } from "../../functions/amount";
 import Board from "../Board";
 import Agent from "../Agent";
 import History from "../History";
 import Dice from "../Dice";
-import { AppStates, HistoryData } from "../../constants/types";
+import { AppStates, CURRENCY, HistoryData } from "../../constants/types";
 import { MainContext } from "../../providers/MainProvider";
 import Button from "../Form/Button";
+import { WalletContext } from "../../providers/WalletProvider";
 
 interface GameScreenProps {
   // Define any props you want to pass to the component here
@@ -14,6 +16,7 @@ interface GameScreenProps {
 
 const GameScreen: React.FC<GameScreenProps> = () => {
   const { gameData, updateState, updateGameResult } = useContext(MainContext);
+  const { contract, signer, fetchWhizBalance } = useContext(WalletContext);
   const [scoreIdx, setScoreIdx] = useState(0);
   const [agentPosition, setAgentPosition] = useState([0, 0]);
   const [balance, setBalance] = useState(0);
@@ -47,7 +50,25 @@ const GameScreen: React.FC<GameScreenProps> = () => {
     ]);
   }, [balance]);
 
-  const handleGameOver = () => {
+  const gameFinalize = async () => {
+    if (contract) {
+      const amount = ethers.utils.parseUnits(balance.toString(), CURRENCY);
+      const tx = await contract?.finishGame(amount, gameData?.gameId);
+      tx.wait();
+      console.log("Finalize game transaction: ", tx);
+    }
+  };
+
+  const handleGameOver = async () => {
+    await gameFinalize();
+    if (signer) {
+      const signBl = await signer.getBalance();
+      console.log(
+        "signer balance after game finish: ",
+        ethers.utils.formatUnits(signBl, CURRENCY)
+      );
+    }
+    fetchWhizBalance();
     updateGameResult({
       gameId: gameData?.gameId,
       player: gameData?.player,
@@ -66,7 +87,9 @@ const GameScreen: React.FC<GameScreenProps> = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="text-3xl font-bold text-text py-2">
             <span>You Game Balance: </span>
-            <span className="text-highlight">{balance.toFixed(3) + "wei"}</span>
+            <span className="text-highlight">
+              {balance.toFixed(3) + CURRENCY}
+            </span>
           </div>
           <div className="w-full flex justify-center gap-10">
             <Board {...{ scoreIdx, setScoreIdx, setAgentPosition }} />
