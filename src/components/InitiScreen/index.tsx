@@ -10,7 +10,7 @@ import { BigNumber } from "ethers";
 interface Props {}
 
 const InitScreen: React.FC<Props> = ({}) => {
-  const { updateState } = useContext(MainContext);
+  const { updateState, gameData, updateGameData } = useContext(MainContext);
   const { contract, signer } = useContext(WalletContext);
   const [userBalance, setUserBalance] = useState<string>("0");
   const [gameStartAmount, setGameStartAmount] = useState<string>("0");
@@ -31,9 +31,31 @@ const InitScreen: React.FC<Props> = ({}) => {
   }
 
   async function gameInitialize() {
-    // const tx = await contract?.initializeGame(gameStartAmount, "wei");
-    updateState(AppStates.GAME);
+    if (contract) {
+      const amount = ethers.utils.parseUnits(gameStartAmount, "wei");
+      const tx = await contract?.initializeGame({ value: amount });
+      const receipt = await tx.wait();
+      console.log("tx: ", receipt);
+      const filter = contract.filters.GameInitialized();
+      console.log("filter: ", filter);
+      const logs = await contract.queryFilter(filter, receipt.blockHash);
+      console.log("logs: ", logs);
+      const event = contract.interface.parseLog(logs[0]);
+      console.log("Event Data:", event.args);
+      updateGameData({
+        gameId: event.args.gameId,
+        player: event.args.player,
+        gameAmount: ethers.utils.formatUnits(event.args.gameAmount, "wei"),
+        playerAmount: ethers.utils.formatUnits(event.args.playerAmount, "wei"),
+      });
+      contract.on("GameInitialized", (result) => {
+        console.log("GameInitialized received:", result);
+      });
+      updateState(AppStates.GAME);
+    }
   }
+
+  console.log("!!!!!!!!!!! gameData: ", gameData);
 
   useEffect(() => {
     if (signer) getUserBalance();

@@ -1,4 +1,4 @@
-import { AppStates } from "../constants/types";
+import { AppStates, GameData } from "../constants/types";
 
 export const updateLocalState = (state: AppStates) => {
   localStorage.setItem("loduwhiz_state", JSON.stringify(state));
@@ -14,4 +14,20 @@ export const checkAndGetLocalState = (state: AppStates) => {
 
 export const clearLocalState = () => {
   localStorage.removeItem("loduwhiz_state");
+};
+
+export const updateGameDataStorage = (data: GameData) => {
+  localStorage.setItem("loduwhiz_game_data", JSON.stringify(data));
+};
+
+export const checkAndGetGameDataFromStorage = (data: GameData) => {
+  const gameData = localStorage.getItem("loduwhiz_game_data");
+  if (!gameData) {
+    localStorage.setItem("loduwhiz_game_data", JSON.stringify(data));
+  }
+  return gameData ? JSON.parse(gameData) : data;
+};
+
+export const clearGameDataFromStorage = () => {
+  localStorage.removeItem("loduwhiz_game_data");
 };

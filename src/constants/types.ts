@@ -15,3 +15,10 @@ export type Amount = {
   id: number;
   value: number;
 };
+
+export type GameData = {
+  gameId: string;
+  player: string;
+  gameAmount: string;
+  playerAmount: string;
+};

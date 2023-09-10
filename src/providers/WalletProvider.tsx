@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 
-const CONTRACT_ADDDRESS = "0x8464135c8F25Da09e49BC8782676a84730C318bC";
+const CONTRACT_ADDDRESS = "0xA15BB66138824a1c7167f5E85b957d04Dd34E468";
 
 declare global {
   interface Window {
@@ -134,7 +134,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
   //   if (provider) {
   //     provider
   //       .getTransactionReceipt(
-  //         "0x38f80ee1ac0cea32ab62bd41ac51ebbc0beeef60c8f31d3639c9128e3784597a"
+  //         "0x7318c89e407000a0a8007a4711a4944c6654793abd88a3b1b1e1001f6f4cadc6"
   //       )
   //       .then((receipt) => {
   //         if (receipt) {
