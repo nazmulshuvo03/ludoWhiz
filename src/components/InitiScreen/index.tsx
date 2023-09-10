@@ -10,7 +10,7 @@ import { BigNumber } from "ethers";
 interface Props {}
 
 const InitScreen: React.FC<Props> = ({}) => {
-  const { updateState, gameData, updateGameData } = useContext(MainContext);
+  const { updateState, updateGameData } = useContext(MainContext);
   const { contract, signer } = useContext(WalletContext);
   const [userBalance, setUserBalance] = useState<string>("0");
   const [gameStartAmount, setGameStartAmount] = useState<string>("0");
@@ -54,8 +54,6 @@ const InitScreen: React.FC<Props> = ({}) => {
       updateState(AppStates.GAME);
     }
   }
-
-  console.log("!!!!!!!!!!! gameData: ", gameData);
 
   useEffect(() => {
     if (signer) getUserBalance();

@@ -22,3 +22,11 @@ export type GameData = {
   gameAmount: string;
   playerAmount: string;
 };
+
+export type GameResult = {
+  gameId: string;
+  player: string;
+  gameAmount: string;
+  playerAmount: string;
+  resultAmount: string;
+};

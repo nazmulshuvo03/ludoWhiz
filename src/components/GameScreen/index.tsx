@@ -4,15 +4,16 @@ import Board from "../Board";
 import Agent from "../Agent";
 import History from "../History";
 import Dice from "../Dice";
-import { HistoryData } from "../../constants/types";
+import { AppStates, HistoryData } from "../../constants/types";
 import { MainContext } from "../../providers/MainProvider";
+import Button from "../Form/Button";
 
 interface GameScreenProps {
   // Define any props you want to pass to the component here
 }
 
 const GameScreen: React.FC<GameScreenProps> = () => {
-  const { gameData } = useContext(MainContext);
+  const { gameData, updateState, updateGameResult } = useContext(MainContext);
   const [scoreIdx, setScoreIdx] = useState(0);
   const [agentPosition, setAgentPosition] = useState([0, 0]);
   const [balance, setBalance] = useState(0);
@@ -46,6 +47,17 @@ const GameScreen: React.FC<GameScreenProps> = () => {
     ]);
   }, [balance]);
 
+  const handleGameOver = () => {
+    updateGameResult({
+      gameId: gameData?.gameId,
+      player: gameData?.player,
+      gameAmount: gameData?.gameAmount,
+      playerAmount: gameData?.playerAmount,
+      resultAmount: balance.toString(),
+    });
+    updateState(AppStates.GAME_OVER);
+  };
+
   console.log("gameData: ", gameData);
 
   return (
@@ -54,7 +66,7 @@ const GameScreen: React.FC<GameScreenProps> = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="text-3xl font-bold text-text py-2">
             <span>You Game Balance: </span>
-            <span className="text-highlight">{balance.toFixed(3)}</span>
+            <span className="text-highlight">{balance.toFixed(3) + "wei"}</span>
           </div>
           <div className="w-full flex justify-center gap-10">
             <Board {...{ scoreIdx, setScoreIdx, setAgentPosition }} />
@@ -65,7 +77,14 @@ const GameScreen: React.FC<GameScreenProps> = () => {
       ) : (
         <div />
       )}
-      <Dice {...{ setScoreIdx }} />
+      {scoreIdx < 100 ? (
+        <Dice {...{ setScoreIdx }} />
+      ) : (
+        <div className="text-3xl font-bold text-text py-2 flex gap-4 items-center">
+          <div>Game Over!</div>
+          <Button onClick={handleGameOver}>Go to Results</Button>
+        </div>
+      )}
     </div>
   );
 };

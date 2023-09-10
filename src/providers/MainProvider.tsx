@@ -1,11 +1,13 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { AppStates, GameData } from "../constants/types";
+import { AppStates, GameData, GameResult } from "../constants/types";
 import tailwindConfig from "../../tailwind.config";
 import {
   updateLocalState,
   checkAndGetLocalState,
   updateGameDataStorage,
   checkAndGetGameDataFromStorage,
+  updateGameResultStorage,
+  checkAndGetGameResultFromStorage,
 } from "../functions/state";
 
 // Declare the context and its variable names with types
@@ -16,6 +18,8 @@ interface MainContextProps {
   updateState: (state: AppStates) => void;
   gameData: GameData;
   updateGameData: (gameData: GameData) => void;
+  gameResult: GameResult;
+  updateGameResult: (gameResult: GameResult) => void;
 }
 
 // Create variable to hold the initial values
@@ -31,6 +35,14 @@ const initialMainContextValues: MainContextProps = {
     playerAmount: "",
   },
   updateGameData: () => {},
+  gameResult: {
+    gameId: "",
+    player: "",
+    gameAmount: "",
+    playerAmount: "",
+    resultAmount: "",
+  },
+  updateGameResult: () => {},
 };
 
 const MainContext = createContext<MainContextProps>(initialMainContextValues);
@@ -46,6 +58,13 @@ const MainProvider: React.FC<MainProviderProps> = ({ children }) => {
     player: "",
     gameAmount: "",
     playerAmount: "",
+  });
+  const [gameResult, setGameResult] = useState<GameResult>({
+    gameId: "",
+    player: "",
+    gameAmount: "",
+    playerAmount: "",
+    resultAmount: "",
   });
   const theme = tailwindConfig.theme?.extend;
 
@@ -66,6 +85,17 @@ const MainProvider: React.FC<MainProviderProps> = ({ children }) => {
     setGameData(currentGameData);
   }, []);
 
+  useEffect(() => {
+    const currentGameResult: GameResult = checkAndGetGameResultFromStorage({
+      gameId: "",
+      player: "",
+      gameAmount: "",
+      playerAmount: "",
+      resultAmount: "",
+    });
+    setGameResult(currentGameResult);
+  }, []);
+
   const updateState = (state: AppStates) => {
     setAppState(state);
     updateLocalState(state);
@@ -76,6 +106,11 @@ const MainProvider: React.FC<MainProviderProps> = ({ children }) => {
     updateGameDataStorage(gameData);
   };
 
+  const updateGameResult = (gameResult: GameResult) => {
+    setGameResult(gameResult);
+    updateGameResultStorage(gameResult);
+  };
+
   // Define and Export the provider state variables here
   const contextValues = {
     theme,
@@ -84,6 +119,8 @@ const MainProvider: React.FC<MainProviderProps> = ({ children }) => {
     updateState,
     gameData,
     updateGameData,
+    gameResult,
+    updateGameResult,
   };
 
   return (
