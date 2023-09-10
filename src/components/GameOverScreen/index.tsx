@@ -5,7 +5,7 @@ import {
   clearGameDataFromStorage,
   clearLocalState,
 } from "../../functions/state";
-import { AppStates } from "../../constants/types";
+import { AppStates, CURRENCY } from "../../constants/types";
 
 interface GameOverScreenProps {
   // Define any props you want to pass to the component here
@@ -50,20 +50,24 @@ const GameOverScreen: React.FC<GameOverScreenProps> = () => {
           ) : (
             <span className="text-error">lost</span>
           )}
-          <span className="text-highlight text-3xl"> {win}wei</span>
+          <span className="text-highlight text-3xl">
+            {" "}
+            {Math.abs(win)}
+            {CURRENCY}
+          </span>
         </div>
         <div className="w-full py-4 text-lg font-light flex flex-col justify-center items-center">
           <div>
             <div>
               <span>You have started the game with: </span>
               <span className="text-highlight">
-                {gameResult?.playerAmount} wei
+                {gameResult?.playerAmount} {CURRENCY}
               </span>
             </div>
             <div>
               <span>You have completed the game with: </span>
               <span className="text-highlight">
-                {gameResult?.resultAmount} wei
+                {gameResult?.resultAmount} {CURRENCY}
               </span>
             </div>
           </div>
