@@ -3,7 +3,9 @@ import { Amount } from "../constants/types";
 const getRandomInt = (min: number, max: number): number => {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  let rand = Math.floor(Math.random() * (max - min + 1)) + min;
+  if (rand === 0) rand = Math.floor(Math.random() * (max - min + 1)) + min;
+  return rand;
 };
 
 const generatedAmountData = () => {

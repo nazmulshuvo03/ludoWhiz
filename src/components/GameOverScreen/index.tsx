@@ -6,6 +6,7 @@ import {
   clearLocalState,
 } from "../../functions/state";
 import { AppStates, CURRENCY } from "../../constants/types";
+import { refreshAmountData } from "../../functions/amount";
 
 interface GameOverScreenProps {
   // Define any props you want to pass to the component here
@@ -28,6 +29,7 @@ const GameOverScreen: React.FC<GameOverScreenProps> = () => {
     clearLocalState();
     clearGameDataFromStorage();
     clearGameDataFromStorage();
+    refreshAmountData();
     setAppState(AppStates.INIT);
   };
 

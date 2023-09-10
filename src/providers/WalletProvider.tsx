@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 import { CURRENCY } from "../constants/types";
+import { refreshAmountData } from "../functions/amount";
 
 const CONTRACT_ADDDRESS = "0xb19b36b1456E65E3A6D514D3F715f204BD59f431";
 
@@ -92,6 +93,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
   async function disconnectWallet() {
     if (provider) {
       clearLocalState();
+      refreshAmountData();
       await provider.send("eth_requestAccounts", [{ eth_accounts: {} }]);
       setIsWalletConnected(false);
       setWalletAddress("");

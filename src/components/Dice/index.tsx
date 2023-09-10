@@ -19,7 +19,13 @@ const Dice = ({ setScoreIdx = () => {} }: DiceProps) => {
 
   useEffect(() => {
     if (dice !== 0) {
-      setScoreIdx((prev: number) => (prev < 100 ? prev + dice : 0));
+      setScoreIdx((prev: number) => {
+        let num = prev + dice;
+        if (num > 100) {
+          num = 100;
+        }
+        return num;
+      });
     }
   }, [dice, setScoreIdx]);
 
