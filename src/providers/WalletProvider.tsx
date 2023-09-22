@@ -6,13 +6,11 @@ import {
   useContext,
 } from "react";
 import { ethers } from "ethers";
-import ABI from "./abi.json";
 import { clearLocalState } from "../functions/state";
 import { CURRENCY } from "../constants/types";
 import { refreshAmountData } from "../functions/amount";
 import { MainContext } from "./MainProvider";
-
-const CONTRACT_ADDDRESS = "0xb19b36b1456E65E3A6D514D3F715f204BD59f431";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../constants/contract";
 
 declare global {
   interface Window {
@@ -135,7 +133,11 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
 
   async function getContract() {
     if (signer) {
-      const ethContract = new ethers.Contract(CONTRACT_ADDDRESS, ABI, signer);
+      const ethContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        CONTRACT_ABI,
+        signer
+      );
       console.log("contract: ", ethContract);
       setContract(ethContract);
       // const contractSigner = ethContract.signer;
@@ -151,7 +153,7 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
   }
 
   async function fetchWhizBalance() {
-    let balance = await contract?.whizBalance();
+    let balance = await contract?.getWhizBalance();
     // balance = ethers.utils.formatEther(balance);
     balance = ethers.utils.formatUnits(balance, CURRENCY);
     setWhizBalance(balance);
@@ -204,6 +206,9 @@ const WalletProvider = ({ children }: WalletProviderProps) => {
           });
         }
       );
+      contract.on("GameFinished", (gameId, game, event) => {
+        console.log("GameFinished event received:", gameId, game, event);
+      });
     }
   }, [contract]);
 
